@@ -2,8 +2,6 @@ const { deleteFile } = require('../../utils/deleteFile')
 const Event = require('../models/events')
 
 const createEvent = async (req, res, next) => {
-  console.log('Request body:', req.body)
-  console.log('Uploaded file:', req.file)
   const { user } = req
   try {
     const eventData = req.body
