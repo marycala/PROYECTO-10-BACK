@@ -1,4 +1,4 @@
-const { isAuth } = require('../../middlewares/auth')
+const { isAuth } = require('../../middlewares/isAuth')
 
 const {
   registerAttendees,

@@ -7,14 +7,9 @@ const isAuth = async (req, res, next) => {
     if (!token) {
       return res.status(401).json('Authorization token is missing')
     }
-
     const parsedToken = token.replace('Bearer ', '')
 
     const { id } = verifySign(parsedToken)
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json('Invalid token or ID')
-    }
 
     const user = await User.findById(id)
     if (!user) {

@@ -1,5 +1,4 @@
-const { isAuth } = require('../../middlewares/auth')
-const { Authority } = require('../../middlewares/authority')
+const { isAuth } = require('../../middlewares/isAuth')
 const upload = require('../../middlewares/file')
 const {
   createEvent,
@@ -13,12 +12,12 @@ const {
 
 const eventsRouter = require('express').Router()
 
-eventsRouter.post('/create', upload.single('img'), isAuth, createEvent)
+eventsRouter.post('/create/:id', isAuth, upload.single('img'), createEvent)
 eventsRouter.get('/', getEvents)
 eventsRouter.get('/:id', getEventById)
 eventsRouter.get('/search/title/:title', getEventByTitle)
 eventsRouter.get('/search/date/:date', getEventByDate)
-eventsRouter.put('/:id', upload.single('img'), isAuth, Authority, updateEvent)
-eventsRouter.delete('/:id', isAuth, Authority, deleteEvent)
+eventsRouter.put('/:id', upload.single('img'), isAuth, updateEvent)
+eventsRouter.delete('/:id', isAuth, deleteEvent)
 
 module.exports = eventsRouter

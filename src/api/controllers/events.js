@@ -1,10 +1,18 @@
 const { deleteFile } = require('../../utils/deleteFile')
 const Event = require('../models/events')
+const User = require('../models/users')
 
 const createEvent = async (req, res, next) => {
-  const { user } = req
   try {
-    const eventData = req.body
+    const userId = req.user._id
+
+    const eventDuplicated = await Event.findOne({ title: req.body.title })
+
+    if (eventDuplicated) {
+      return res.status(400).json({ message: 'This event already exists' })
+    }
+
+    const eventData = { ...req.body }
 
     if (req.file) {
       eventData.img = req.file.path
@@ -14,18 +22,26 @@ const createEvent = async (req, res, next) => {
       eventData.img = null
     }
 
+    const user = await User.findById(userId)
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    eventData.creator = user._id
+
     const event = new Event(eventData)
-    event.creator = user._id
 
     await event.save()
+
     const newEvent = await Event.findById(event._id).populate({
       path: 'creator',
       select: 'userName'
     })
 
-    return res
-      .status(201)
-      .json({ message: 'Event created successfully', newEvent })
+    return res.status(201).json({
+      message: 'Event created successfully',
+      newEvent
+    })
   } catch (error) {
     console.log('Error creating event:', error)
     return res.status(500).json({
