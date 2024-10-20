@@ -28,19 +28,25 @@ const getUserById = async (req, res, next) => {
 }
 
 const register = async (req, res, next) => {
-  const { email } = req.body
+  const { email, password, userName } = req.body
+
   try {
     const emailDuplicated = await User.findOne({ email })
     if (emailDuplicated) {
-      return res.status(400).json('The user already exists')
+      return res.status(400).json({ message: 'The user already exists' })
     }
 
-    const newUser = new User({ ...req.body })
+    const newUser = new User({ userName, email, password })
     await newUser.save()
 
-    return res.status(201).json({ newUser })
+    const userToReturn = newUser.toObject()
+    delete userToReturn.password
+
+    return res
+      .status(201)
+      .json({ message: 'User created successfully', user: userToReturn })
   } catch (error) {
-    return res.status(400).json({ message: 'Error creating user', error })
+    return res.status(500).json({ message: 'Error creating user', error })
   }
 }
 
