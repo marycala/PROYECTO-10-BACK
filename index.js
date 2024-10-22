@@ -17,17 +17,7 @@ cloudinary.config({
   api_secret: process.env.API_SECRET
 })
 
-app.use(
-  cors({
-    origin: [
-      'http://localhost:3000',
-      'https://proyecto-10-back-mu.vercel.app',
-      'https://proyecto-10-front-one.vercel.app'
-    ],
-    credentials: true
-  })
-)
-
+app.use(cors())
 app.use(express.json())
 
 app.use('/api/v1/events', eventsRouter)

@@ -43,7 +43,6 @@ const createEvent = async (req, res, next) => {
       newEvent
     })
   } catch (error) {
-    console.log('Error creating event:', error)
     return res.status(500).json({
       message: 'There was a problem, please try again',
       error: error.message
@@ -68,7 +67,6 @@ const getEvents = async (req, res) => {
 
     return res.status(200).json(events)
   } catch (error) {
-    console.error('Error fetching events:', error)
     return res.status(500).json({ message: 'Server error', error })
   }
 }
@@ -187,7 +185,6 @@ const updateEvent = async (req, res) => {
 
     return res.status(201).json({ message: 'Event update', updateEvent })
   } catch (error) {
-    console.log(error)
     return res
       .status(500)
       .json({ message: 'There was a problem, please try again' })
