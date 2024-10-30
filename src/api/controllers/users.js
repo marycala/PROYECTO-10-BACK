@@ -1,4 +1,4 @@
-const { generateSign } = require('../../utils/jwt')
+const { generateSign, verifySign } = require('../../utils/jwt')
 const User = require('../models/users')
 const bcrypt = require('bcrypt')
 
@@ -63,6 +63,14 @@ const login = async (req, res) => {
 
     if (isMatch) {
       const token = generateSign(user._id)
+      const decodedToken = verifySign(token)
+
+      if (Date.now() >= decodedToken.exp * 1000) {
+        return res
+          .status(401)
+          .json({ message: 'Session expired. Please log in again.' })
+      }
+
       return res.status(200).json({ token, user })
     } else {
       return res.status(400).json({ message: 'Incorrect email or password' })
