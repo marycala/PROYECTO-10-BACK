@@ -63,15 +63,15 @@ const login = async (req, res) => {
 
     if (isMatch) {
       const token = generateSign(user._id)
-      const decodedToken = verifySign(token)
 
-      if (Date.now() >= decodedToken.exp * 1000) {
+      try {
+        verifySign(token)
+        return res.status(200).json({ token, user })
+      } catch (error) {
         return res
           .status(401)
           .json({ message: 'Session expired. Please log in again.' })
       }
-
-      return res.status(200).json({ token, user })
     } else {
       return res.status(400).json({ message: 'Incorrect email or password' })
     }
