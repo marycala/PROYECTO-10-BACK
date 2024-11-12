@@ -66,7 +66,14 @@ const login = async (req, res) => {
 
       try {
         verifySign(token)
-        return res.status(200).json({ token, user })
+
+        const userToReturn = {
+          _id: user._id,
+          userName: user.userName,
+          email: user.email,
+          rol: user.rol
+        }
+        return res.status(200).json({ token, user: userToReturn })
       } catch (error) {
         return res
           .status(401)
