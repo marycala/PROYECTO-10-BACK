@@ -183,7 +183,7 @@ const updateEvent = async (req, res) => {
       updateEvent.attendees = updateEvent.attendees.length
     }
 
-    return res.status(201).json({ message: 'Event update', updateEvent })
+    return res.status(200).json({ message: 'Event update', updateEvent })
   } catch (error) {
     return res
       .status(500)
